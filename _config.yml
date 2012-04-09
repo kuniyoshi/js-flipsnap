@@ -1,1 +1,6 @@
-foo: bar
+source: _src
+destination: _site
+
+scss:
+  source: _src/_scss
+  destination: css
