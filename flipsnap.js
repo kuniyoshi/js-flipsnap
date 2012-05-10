@@ -82,6 +82,7 @@ Flipsnap.prototype.init = function(element, conf) {
 	self.currentPoint = 0;
 	self.currentX = 0;
 	self.animation = false;
+	self._notWantAnimation = conf.notWantAnimation || false;
 
 	self.refresh();
 
@@ -196,19 +197,33 @@ Flipsnap.prototype.moveToPoint = function(point) {
 		self.currentPoint = parseInt(point);
 	}
 
-	if (support.cssAnimation) {
-		self._setStyle({ transitionDuration: '350ms' });
-	}
-	else {
-		self.animation = true;
+	if (!self.getNotWantAnimation()) {
+		if (support.cssAnimation) {
+			self._setStyle({ transitionDuration: '350ms' });
+		}
+		else {
+			self.animation = true;
+		}
 	}
 	self._setX(- self.currentPoint * self.distance);
 
 	if (beforePoint !== self.currentPoint) { // is move?
 		triggerEvent(self.element, 'fsmoveend', true, false);
 		triggerEvent(self.element, 'flipsnap.moveend', true, false); // backward compatibility (deprecated)
+	} else {
+		triggerEvent(self.element, 'fsmovefailed', true, false);
 	}
 };
+
+Flipsnap.prototype.getNotWantAnimation = function () {
+	var self = this;
+	return self._notWantAnimation;
+}
+
+Flipsnap.prototype.setNotWantAnimation = function (flag) {
+	var self = this;
+	self._notWantAnimation = flag;
+}
 
 Flipsnap.prototype._setX = function(x) {
 	var self = this;
