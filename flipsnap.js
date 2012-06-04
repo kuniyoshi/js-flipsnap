@@ -210,7 +210,7 @@ Flipsnap.prototype.moveToPoint = function(point) {
 	if (beforePoint !== self.currentPoint) { // is move?
 		triggerEvent(self.element, 'fsmoveend', true, false);
 		triggerEvent(self.element, 'flipsnap.moveend', true, false); // backward compatibility (deprecated)
-	} else {
+	} else if ((Math.abs(self.basePageX - self.startPageX) || 0) > 70) {
 		triggerEvent(self.element, 'fsmovefailed', true, false);
 	}
 };
